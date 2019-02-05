@@ -47,4 +47,4 @@ Add the following lines to /etc/prometheus/prometheus.yml:
 "
 
 echo Cleaning up left over files
-rm -rf node_exporter*
+sudo rm -rf node_exporter*
