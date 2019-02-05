@@ -1,5 +1,12 @@
 #!/bin/bash
-NODE_EXPORTER_VERSION="0.16.0"
+
+echo Removing old version of Node exporter
+systemctl stop node_exporter
+rm -rf $(which node_exporter)
+
+echo Dowinloading and installing latest version of Node exporter
+
+NODE_EXPORTER_VERSION=$(repo="prometheus/node_exporter" && curl --silent "https://api.github.com/repos/$repo/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
 wget https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
 tar -xzvf node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
 cd node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64
@@ -39,3 +46,5 @@ Add the following lines to /etc/prometheus/prometheus.yml:
       - targets: ['localhost:9100']
 "
 
+echo Cleaning up left over files
+rm -rf /tmp/node_exporter*
