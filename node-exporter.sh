@@ -2,14 +2,14 @@
 
 echo Removing old version of Node exporter
 systemctl stop node_exporter
-rm -rf $(which node_exporter)
+sudo rm -rf $(which node_exporter)
 
 echo Dowinloading and installing latest version of Node exporter
 
 NODE_EXPORTER_VERSION=$(repo="prometheus/node_exporter" && curl --silent "https://api.github.com/repos/$repo/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
-wget https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
-tar -xzvf node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
-cd node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64
+wget https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz -O /tmp/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
+tar -xzvf /tmp/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
+cd /tmp/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64
 cp node_exporter /usr/local/bin
 
 # create user
@@ -47,4 +47,4 @@ Add the following lines to /etc/prometheus/prometheus.yml:
 "
 
 echo Cleaning up left over files
-sudo rm -rf node_exporter*
+sudo rm -rf /tmp/node_exporter*
